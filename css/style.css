@@ -481,6 +481,10 @@ body::after {
   display: block;
 }
 
+.brand-mobile {
+  display: none;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -3936,13 +3940,21 @@ chat-widget-container .chat-widget-container {
     border-bottom: 1px solid rgba(125, 162, 255, 0.12);
   }
 
-  .hero__logo-area {
-    display: block;
-    margin-bottom: 18px;
+  .brand-mobile {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
   }
 
-  .brand__logo-img {
-    height: 48px;
+  .brand-mobile__img {
+    height: 32px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .hero__logo-area {
+    display: none !important;
   }
 
   .nav-links {

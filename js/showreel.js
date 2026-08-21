@@ -161,7 +161,7 @@
   };
 
   const syncIntroState = () => {
-    if (!intro) return;
+    if (!intro || window.innerWidth <= 820) return;
 
     const scrollRange = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = clamp((window.scrollY - intro.offsetTop) / scrollRange, 0, 1);
