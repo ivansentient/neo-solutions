@@ -1,5 +1,5 @@
 /**
- * nav.js — Scroll-reveal for top header and active scrollspy for bottom nav bar.
+ * nav.js — Header visibility, accurate section scrolling, and active tab scrollspy.
  */
 (() => {
   'use strict';
@@ -27,56 +27,101 @@
   window.addEventListener('scroll', updateVisibility, { passive: true });
   window.addEventListener('resize', updateVisibility);
 
-  // Scrollspy for bottom navigation
-  if (navItems.length > 0) {
-    const sectionIds = Array.from(navItems).map(item => item.getAttribute('data-section')).filter(Boolean);
-    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+  // Section targets in visual DOM order
+  const sections = [
+    { id: 'hero-demo', el: document.querySelector('.hero__copy') || document.getElementById('hero-demo') },
+    { id: 'how-it-works', el: document.getElementById('how-it-works') },
+    { id: 'audience', el: document.getElementById('audience') },
+    { id: 'pricing', el: document.getElementById('pricing') }
+  ];
 
-    const updateActiveTab = () => {
-      const scrollPos = window.scrollY + 180;
-      let currentSectionId = sectionIds[0];
+  window.syncBottomNavActive = (forcedSection) => {
+    if (!navItems.length) return;
 
-      if (window.scrollY < 120) {
-        currentSectionId = sectionIds[0];
+    let activeId = forcedSection;
+
+    if (!activeId) {
+      if (document.body.classList.contains('video-modal-open')) {
+        activeId = 'video';
+      } else if (window.scrollY < 200) {
+        activeId = 'hero-demo';
       } else {
-        for (const section of sections) {
-          if (section.offsetTop <= scrollPos) {
-            currentSectionId = section.id;
+        const threshold = window.innerHeight * 0.45;
+        activeId = 'hero-demo';
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const sec = sections[i];
+          if (sec.el) {
+            const rect = sec.el.getBoundingClientRect();
+            if (rect.top <= threshold && rect.bottom > 80) {
+              activeId = sec.id;
+              break;
+            }
           }
         }
       }
+    }
 
-      navItems.forEach(item => {
-        const isActive = item.getAttribute('data-section') === currentSectionId;
-        item.classList.toggle('is-active', isActive);
-        item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    navItems.forEach(item => {
+      const section = item.getAttribute('data-section');
+      const isActive = section === activeId;
+      item.classList.toggle('is-active', isActive);
+      item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  };
+
+  if (navItems.length > 0) {
+    let scrollRaf = 0;
+    window.addEventListener('scroll', () => {
+      if (scrollRaf) return;
+      scrollRaf = requestAnimationFrame(() => {
+        scrollRaf = 0;
+        window.syncBottomNavActive();
       });
-    };
+    }, { passive: true });
 
-    window.addEventListener('scroll', updateActiveTab, { passive: true });
-    updateActiveTab();
+    window.syncBottomNavActive();
 
-    // Smooth click handler
+    // Click handler for bottom navigation items
     navItems.forEach(item => {
       item.addEventListener('click', (e) => {
-        const targetId = item.getAttribute('data-section');
-        if (targetId === 'hero-demo' || targetId === 'showreel' && window.scrollY < 200) {
-          e.preventDefault();
+        e.preventDefault();
+        const section = item.getAttribute('data-section');
+
+        // 1. Video modal tab
+        if (section === 'video') {
+          if (typeof window.openVideoModal === 'function') {
+            window.openVideoModal();
+          }
+          return;
+        }
+
+        // Close modal if open
+        if (document.body.classList.contains('video-modal-open') && typeof window.closeVideoModal === 'function') {
+          window.closeVideoModal();
+        }
+
+        // 2. Home / Hero section
+        if (section === 'hero-demo' || section === 'home' || section === 'top') {
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
           });
+          window.syncBottomNavActive('hero-demo');
           return;
         }
 
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          e.preventDefault();
-          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 64;
+        // 3. Specific section (Pasos, Audiencia, Precios)
+        const targetObj = sections.find(s => s.id === section);
+        const target = targetObj ? targetObj.el : document.getElementById(section);
+        if (target) {
+          const headerHeight = 60;
+          const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
           window.scrollTo({
             top: Math.max(0, targetY),
             behavior: 'smooth'
           });
+          window.syncBottomNavActive(section);
         }
       });
     });
