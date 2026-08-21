@@ -91,28 +91,25 @@
       border: 1px solid rgba(125, 162, 255, 0.22) !important;
       border-radius: 16px !important;
       border-bottom-left-radius: 4px !important;
-      padding: 10px 14px !important;
+      padding: 11px 15px !important;
       display: inline-flex !important;
       align-items: center !important;
-      gap: 8px !important;
-      color: #d9e6ff !important;
-      font-size: 13px !important;
-      font-weight: 500 !important;
+      justify-content: center !important;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
     }
 
     .neo-thinking-dots {
       display: inline-flex !important;
       align-items: center !important;
-      gap: 4px !important;
+      gap: 5px !important;
     }
 
     .neo-thinking-dot {
-      width: 6px !important;
-      height: 6px !important;
+      width: 7px !important;
+      height: 7px !important;
       border-radius: 50% !important;
       background: #4be2ff !important;
-      box-shadow: 0 0 8px rgba(75, 226, 255, 0.9) !important;
+      box-shadow: 0 0 10px rgba(75, 226, 255, 0.9) !important;
       display: inline-block !important;
       animation: neoDotPulse 1.2s infinite ease-in-out both;
     }
@@ -120,12 +117,6 @@
     .neo-thinking-dot:nth-child(1) { animation-delay: -0.32s; }
     .neo-thinking-dot:nth-child(2) { animation-delay: -0.16s; }
     .neo-thinking-dot:nth-child(3) { animation-delay: 0s; }
-
-    .neo-thinking-text {
-      color: #a8b6d4 !important;
-      font-size: 12.5px !important;
-      letter-spacing: 0.02em !important;
-    }
 
     @media (max-width: 768px) {
       .chat-widget-container {
@@ -157,11 +148,6 @@
 
     removeThinkingIndicator(root);
 
-    const isEs = (window.currentLang === 'es') || 
-      (document.documentElement.lang === 'es') || 
-      (typeof navigator !== 'undefined' && navigator.language && navigator.language.toLowerCase().startsWith('es'));
-    const textLabel = isEs ? 'Neo pensando...' : 'Neo thinking...';
-
     const row = document.createElement('div');
     row.className = 'neo-thinking-row';
     row.innerHTML = `
@@ -174,7 +160,6 @@
           <span class="neo-thinking-dot"></span>
           <span class="neo-thinking-dot"></span>
         </div>
-        <span class="neo-thinking-text">${textLabel}</span>
       </div>
     `;
 
