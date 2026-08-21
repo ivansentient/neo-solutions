@@ -104,6 +104,7 @@
   let rafId = 0;
   const tick = () => {
     rafId = 0;
+    if (window.innerWidth <= 820) return;
     sections.forEach(updateSection);
     const needsMore = sections.some(renderSection);
     if (needsMore) {
@@ -112,6 +113,7 @@
   };
 
   const onScroll = () => {
+    if (window.innerWidth <= 820) return;
     if (rafId) return;
     rafId = window.requestAnimationFrame(tick);
   };

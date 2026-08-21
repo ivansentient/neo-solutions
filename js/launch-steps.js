@@ -74,6 +74,15 @@
   };
 
   const requestUpdate = () => {
+    if (window.innerWidth <= 820) {
+      sections.forEach(section => {
+        section.classList.add('is-condensed', 'is-complete');
+        section.querySelectorAll('.launch-steps__card').forEach(card => {
+          card.classList.add('is-visible');
+        });
+      });
+      return;
+    }
     if (rafId) return;
     rafId = window.requestAnimationFrame(update);
   };

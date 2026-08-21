@@ -1,4 +1,6 @@
 (() => {
+  if (window.innerWidth <= 820) return;
+
   const root = document.documentElement;
   const move = (x, y) => {
     root.style.setProperty("--mx", `${x}px`);
@@ -7,6 +9,7 @@
 
   let frame = 0;
   window.addEventListener("pointermove", (event) => {
+    if (window.innerWidth <= 820) return;
     if (frame) {
       cancelAnimationFrame(frame);
     }
@@ -16,5 +19,5 @@
       const y = (event.clientY / window.innerHeight - 0.5) * 18;
       move(x, y);
     });
-  });
+  }, { passive: true });
 })();

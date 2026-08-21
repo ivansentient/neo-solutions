@@ -4084,17 +4084,30 @@ chat-widget-container .chat-widget-container {
     min-height: 0;
   }
 
+  /* Performance optimizations: disable heavy GPU blur orbs on mobile */
+  .parallax,
+  .hero__bg,
+  .hero__orb,
+  .background-beams {
+    display: none !important;
+  }
+
+  .hero__orb--planet {
+    display: none !important;
+  }
+
   .hero__visual {
     min-height: auto;
-    padding-bottom: 40px;
+    padding-bottom: 24px;
   }
 
   .demo {
     transform: none;
     border-radius: 20px;
-    border: 1px solid rgba(125, 162, 255, 0.2);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(31, 94, 255, 0.15);
+    border: 1px solid rgba(125, 162, 255, 0.18);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+    background: #060a17;
   }
 
   .demo__layout {
@@ -4108,27 +4121,21 @@ chat-widget-container .chat-widget-container {
 
   .demo__chat {
     border-right: 0;
-    min-height: 420px;
-    padding: 16px;
+    min-height: 380px;
+    padding: 14px;
+    background: #060a17;
   }
 
   .floating-tag {
     bottom: 8px;
     max-width: calc(100% - 20px);
-    font-size: 0.75rem;
-    padding: 6px 12px;
-  }
-
-  .hero__orb--planet {
-    width: 100vw;
-    right: -40vw;
-    top: 2vh;
-    opacity: 0.6;
+    font-size: 0.72rem;
+    padding: 5px 10px;
   }
 
   .hero__showreel {
-    margin-top: 48px;
-    padding-bottom: 36px;
+    margin-top: 36px;
+    padding-bottom: 24px;
   }
 
   .showreel__title {
@@ -4159,26 +4166,26 @@ chat-widget-container .chat-widget-container {
   .showreel__frame {
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   }
 
   .showreel__reasons-grid {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
   }
 
   .showreel__reason {
-    border-radius: 18px;
-    padding: 18px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(125, 162, 255, 0.14);
+    border-radius: 16px;
+    padding: 16px;
+    background: #080e22;
+    border: 1px solid rgba(125, 162, 255, 0.12);
   }
 
   .showreel__tickers {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-top: 36px;
+    margin-top: 28px;
     align-items: center;
   }
 
@@ -4187,13 +4194,17 @@ chat-widget-container .chat-widget-container {
     width: 100%;
   }
 
+  .showreel__tickers > .showreel__ticker-line:nth-child(n+3) {
+    display: none; /* keep only 2 lightweight ticker lines on mobile */
+  }
+
   .showreel__ticker-title {
     position: static;
     transform: none;
     width: 100%;
     max-width: 92vw;
-    margin: 0 auto 16px;
-    font-size: clamp(1.5rem, 6.8vw, 2.2rem);
+    margin: 0 auto 14px;
+    font-size: clamp(1.4rem, 6.2vw, 2rem);
     line-height: 1.1;
     text-align: center;
     pointer-events: auto;
@@ -4270,41 +4281,36 @@ chat-widget-container .chat-widget-container {
   }
 
   .launch-steps {
-    min-height: 150svh;
+    min-height: auto;
+    padding: 36px 0 20px;
   }
 
   .launch-steps__sticky {
-    align-items: center;
-    padding: 48px 16px 24px;
+    position: static;
+    min-height: auto;
+    padding: 0 14px;
+    align-items: flex-start;
+  }
+
+  .launch-steps__sticky::before,
+  .launch-steps__sticky::after {
+    display: none !important;
   }
 
   .launch-steps__content {
     width: 100%;
+    transform: none !important;
   }
 
   .launch-steps__title {
-    max-width: 13ch;
-    margin-bottom: 16px;
-    font-size: clamp(1.85rem, 8.5vw, 2.8rem);
-    line-height: 1.02;
-  }
-
-  .launch-steps.is-condensed .launch-steps__content {
-    transform: none;
-  }
-
-  .launch-steps.is-condensed .launch-steps__title {
-    margin-bottom: 16px;
-  }
-
-  .launch-steps.is-condensed .launch-steps__progress {
+    max-width: 100%;
     margin-bottom: 14px;
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    line-height: 1.05;
   }
 
   .launch-steps__progress {
-    width: 100%;
-    max-width: 320px;
-    margin-bottom: 14px;
+    display: none;
   }
 
   .launch-steps__cards {
@@ -4319,9 +4325,11 @@ chat-widget-container .chat-widget-container {
   .launch-steps__card {
     min-height: 0;
     padding: 16px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(125, 162, 255, 0.16);
+    border-radius: 18px;
+    background: #080e22;
+    border: 1px solid rgba(125, 162, 255, 0.12);
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .launch-steps.is-condensed .launch-steps__card {
