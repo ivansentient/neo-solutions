@@ -259,9 +259,11 @@
   // Wistia/YouTube load eagerly. Playback with audio still waits for the first
   // user gesture: player click handled natively, or scroll/touch/keyboard here.
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('wheel', startIntroVideo, { passive: true });
-  window.addEventListener('touchstart', startIntroVideo, { passive: true });
-  window.addEventListener('keydown', startIntroVideo, { passive: true });
+  if (window.innerWidth > 820) {
+    window.addEventListener('wheel', startIntroVideo, { passive: true });
+    window.addEventListener('touchstart', startIntroVideo, { passive: true });
+    window.addEventListener('keydown', startIntroVideo, { passive: true });
+  }
   if (isIntroVideo) {
     intro.addEventListener('click', startIntroVideoFromClick, { passive: true, capture: true });
     if (isNativeVideo) {

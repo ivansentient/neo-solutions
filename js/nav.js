@@ -4,8 +4,17 @@
 (() => {
   'use strict';
 
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  window.addEventListener('load', () => {
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, { once: true });
+
   const header = document.querySelector('.hero__header');
-  const bottomNav = document.querySelector('.mobile-bottom-nav');
   const navItems = document.querySelectorAll('.bottom-nav__item');
 
   const updateVisibility = () => {
@@ -27,9 +36,13 @@
       const scrollPos = window.scrollY + 180;
       let currentSectionId = sectionIds[0];
 
-      for (const section of sections) {
-        if (section.offsetTop <= scrollPos) {
-          currentSectionId = section.id;
+      if (window.scrollY < 120) {
+        currentSectionId = sectionIds[0];
+      } else {
+        for (const section of sections) {
+          if (section.offsetTop <= scrollPos) {
+            currentSectionId = section.id;
+          }
         }
       }
 
@@ -47,12 +60,21 @@
     navItems.forEach(item => {
       item.addEventListener('click', (e) => {
         const targetId = item.getAttribute('data-section');
+        if (targetId === 'hero-demo' || targetId === 'showreel' && window.scrollY < 200) {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+          return;
+        }
+
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
           e.preventDefault();
-          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 70;
+          const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 64;
           window.scrollTo({
-            top: targetY,
+            top: Math.max(0, targetY),
             behavior: 'smooth'
           });
         }
