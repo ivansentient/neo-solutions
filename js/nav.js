@@ -27,8 +27,8 @@
   window.addEventListener('scroll', updateVisibility, { passive: true });
   window.addEventListener('resize', updateVisibility);
 
-  // Section targets in DOM order
-  const sectionIds = ['hero-demo', 'why-neo', 'how-it-works', 'audience', 'pricing'];
+  // Section targets in visual DOM order
+  const sectionIds = ['hero-demo', 'showreel', 'why-neo', 'how-it-works', 'audience', 'pricing', 'faq'];
   const getSectionElements = () => {
     return sectionIds.map(id => ({
       id,
@@ -44,7 +44,7 @@
     let activeId = forcedSection;
 
     if (!activeId) {
-      if (window.scrollY < 200) {
+      if (window.scrollY < 120) {
         activeId = 'hero-demo';
       } else {
         const sections = getSectionElements();
@@ -100,7 +100,7 @@
         // 2. Section scroll with top header offset
         const target = document.getElementById(section);
         if (target) {
-          const headerHeight = 64;
+          const headerHeight = 60;
           const targetY = target.getBoundingClientRect().top + window.scrollY - headerHeight;
           window.scrollTo({
             top: Math.max(0, targetY),
