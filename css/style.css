@@ -489,6 +489,15 @@ body::after {
   display: none;
 }
 
+.video-modal-overlay {
+  display: none;
+}
+
+.main-page-wrapper {
+  width: 100%;
+  transition: filter 320ms cubic-bezier(0.16, 1, 0.3, 1), -webkit-filter 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -3943,36 +3952,13 @@ chat-widget-container .chat-widget-container {
     pointer-events: auto !important;
   }
 
-  /* Centered intro video on mobile */
+  /* Hide in-flow showreel on mobile since it opens in initial overlay */
   .hero__showreel--top {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    min-height: auto;
-    margin: 0 auto 18px;
-    padding: calc(64px + env(safe-area-inset-top, 0px)) 14px 0;
-    background: transparent;
-  }
-
-  .showreel__inner--top {
-    width: 100%;
-    max-width: min(100vw - 28px, 460px);
-    margin: 0 auto;
-    padding: 0;
-  }
-
-  .hero__showreel--top .showreel__frame {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(125, 162, 255, 0.28);
-    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.75), 0 0 35px rgba(31, 94, 255, 0.25);
-    background: #02030a;
+    display: none !important;
   }
 
   .hero {
-    padding-top: 10px;
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
   }
 
   .brand-mobile {
@@ -4803,6 +4789,147 @@ chat-widget-container .chat-widget-container {
     border-radius: 0 !important;
     border-left: 0 !important;
     border-right: 0 !important;
+  }
+
+  /* Video Modal Overlay (Mobile Initial Overlay & Blur) */
+  body.video-modal-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+  }
+
+  body.video-modal-open .main-page-wrapper,
+  body.video-modal-open .hero__header,
+  body.video-modal-open .mobile-bottom-nav,
+  body.video-modal-open chat-widget-button,
+  body.video-modal-open .chat-widget-button {
+    filter: blur(14px) brightness(0.35) saturate(80%);
+    -webkit-filter: blur(14px) brightness(0.35) saturate(80%);
+    pointer-events: none !important;
+    user-select: none !important;
+  }
+
+  .video-modal-overlay.is-open {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(24px + env(safe-area-inset-bottom, 0px));
+    animation: videoModalFadeIn 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .video-modal-overlay.is-hidden {
+    display: none !important;
+  }
+
+  .video-modal-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 4, 12, 0.88);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    z-index: 1;
+  }
+
+  .video-modal-overlay__dialog {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: min(94vw, 480px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: videoModalScaleIn 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .video-modal-overlay__top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 4px;
+  }
+
+  .video-modal-overlay__logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .video-modal-overlay__skip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(125, 162, 255, 0.22);
+    color: #e6eeff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 180ms ease, transform 150ms ease;
+  }
+
+  .video-modal-overlay__skip-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .video-modal-overlay__video-card {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(125, 162, 255, 0.35);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(31, 94, 255, 0.35);
+    background: #02030a;
+  }
+
+  .video-modal-overlay__player {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .video-modal-overlay__actions {
+    width: 100%;
+  }
+
+  .video-modal-overlay__enter-btn {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2465ff, #1136b8);
+    border: 1px solid rgba(125, 162, 255, 0.35);
+    box-shadow: 0 10px 30px rgba(31, 94, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  .video-modal-overlay__enter-btn:active {
+    transform: scale(0.98);
+  }
+
+  @keyframes videoModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes videoModalScaleIn {
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
 }
 

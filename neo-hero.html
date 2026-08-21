@@ -75,6 +75,7 @@
     </script>
   </head>
   <body>
+    <div class="main-page-wrapper" id="main-page-wrapper">
     <div class="hero__showreel hero__showreel--top" id="showreel">
       <div class="showreel__inner showreel__inner--top">
         <div class="showreel__frame">
@@ -1140,6 +1141,41 @@
         </div>
       </div>
     </section>
+    </div> <!-- /main-page-wrapper -->
+
+    <!-- Video Modal Overlay for Mobile Intro (Darkens & blurs the entire site) -->
+    <div class="video-modal-overlay is-open" id="video-modal-overlay" role="dialog" aria-modal="true" aria-label="Video de presentación Neo Solutions">
+      <div class="video-modal-overlay__backdrop" id="video-modal-backdrop"></div>
+      <div class="video-modal-overlay__dialog">
+        <header class="video-modal-overlay__top-bar">
+          <div class="video-modal-overlay__brand">
+            <img src="assets/brand/neo-logo-white.webp" alt="Neo Solutions" class="video-modal-overlay__logo">
+          </div>
+          <button type="button" class="video-modal-overlay__skip-btn" id="close-video-modal" aria-label="Cerrar video y explorar sitio">
+            <span data-en="Skip to website" data-es="Saltar al sitio">Skip to website</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </header>
+
+        <div class="video-modal-overlay__video-card">
+          <wistia-player
+            class="video-modal-overlay__player"
+            id="mobile-intro-player"
+            media-id="ro89dasf7b"
+            aspect="1.7777777777777777"
+            preload="auto"
+            fit-strategy="contain"
+          ></wistia-player>
+        </div>
+
+        <footer class="video-modal-overlay__actions">
+          <button type="button" class="video-modal-overlay__enter-btn" id="enter-website-btn">
+            <span data-en="Enter Website" data-es="Entrar al sitio web">Enter Website</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </footer>
+      </div>
+    </div>
 
     <!-- Mobile App Bottom Navigation Bar (Complete 7 Section Icons) -->
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegación móvil" data-en-aria-label="Mobile Navigation" data-es-aria-label="Navegación móvil">
@@ -1147,7 +1183,7 @@
         <svg class="bottom-nav__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         <span class="bottom-nav__label" data-en="Home" data-es="Inicio">Inicio</span>
       </a>
-      <a href="#showreel" class="bottom-nav__item" data-section="showreel" aria-label="Video">
+      <a href="#video" class="bottom-nav__item" data-section="video" aria-label="Video">
         <svg class="bottom-nav__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         <span class="bottom-nav__label" data-en="Video" data-es="Video">Video</span>
       </a>
@@ -1181,6 +1217,7 @@
     <script src="js/launch-steps.js?v=42"></script>
     <script src="js/audience-carousel.js?v=7"></script>
     <script src="js/showreel.js?v=7"></script>
+    <script src="js/video-modal.js?v=2"></script>
     <script src="js/lead-form.js?v=1"></script>
     <script
       src="https://cdn.builderbot.cloud/sdk.umd.js"

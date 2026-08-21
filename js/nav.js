@@ -27,8 +27,8 @@
   window.addEventListener('scroll', updateVisibility, { passive: true });
   window.addEventListener('resize', updateVisibility);
 
-  // Section targets in visual DOM order
-  const sectionIds = ['hero-demo', 'showreel', 'why-neo', 'how-it-works', 'audience', 'pricing', 'faq'];
+  // Section targets in DOM order
+  const sectionIds = ['hero-demo', 'why-neo', 'how-it-works', 'audience', 'pricing', 'faq'];
   const getSectionElements = () => {
     return sectionIds.map(id => ({
       id,
@@ -38,13 +38,15 @@
     })).filter(item => Boolean(item.el));
   };
 
-  const syncBottomNavActive = (forcedSection) => {
+  window.syncBottomNavActive = (forcedSection) => {
     if (!navItems.length) return;
 
     let activeId = forcedSection;
 
     if (!activeId) {
-      if (window.scrollY < 120) {
+      if (document.body.classList.contains('video-modal-open')) {
+        activeId = 'video';
+      } else if (window.scrollY < 120) {
         activeId = 'hero-demo';
       } else {
         const sections = getSectionElements();
@@ -75,11 +77,11 @@
       if (scrollRaf) return;
       scrollRaf = requestAnimationFrame(() => {
         scrollRaf = 0;
-        syncBottomNavActive();
+        window.syncBottomNavActive();
       });
     }, { passive: true });
 
-    syncBottomNavActive();
+    window.syncBottomNavActive();
 
     // Click handler for bottom navigation items
     navItems.forEach(item => {
@@ -87,17 +89,30 @@
         e.preventDefault();
         const section = item.getAttribute('data-section');
 
-        // 1. Home / Hero
+        // 1. Video modal tab
+        if (section === 'video' || section === 'showreel') {
+          if (typeof window.openVideoModal === 'function') {
+            window.openVideoModal();
+          }
+          return;
+        }
+
+        // Close modal if open
+        if (document.body.classList.contains('video-modal-open') && typeof window.closeVideoModal === 'function') {
+          window.closeVideoModal();
+        }
+
+        // 2. Home / Hero
         if (section === 'hero-demo' || section === 'home') {
           window.scrollTo({
             top: 0,
             behavior: 'smooth'
           });
-          syncBottomNavActive('hero-demo');
+          window.syncBottomNavActive('hero-demo');
           return;
         }
 
-        // 2. Section scroll with top header offset
+        // 3. Section scroll with top header offset
         const target = document.getElementById(section);
         if (target) {
           const headerHeight = 60;
@@ -106,7 +121,7 @@
             top: Math.max(0, targetY),
             behavior: 'smooth'
           });
-          syncBottomNavActive(section);
+          window.syncBottomNavActive(section);
         }
       });
     });
