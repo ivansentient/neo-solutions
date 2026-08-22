@@ -12,6 +12,7 @@
   const enterBtn = document.getElementById('enter-website-btn');
   const backdrop = document.getElementById('video-modal-backdrop');
   const player = document.getElementById('mobile-intro-player');
+  const isMobile = () => window.innerWidth <= 820;
 
   window.openVideoModal = () => {
     overlay.classList.remove('is-hidden');
@@ -45,11 +46,13 @@
     }
   };
 
-  // Keep the intro optional. Mobile visitors should land directly on the
-  // concise page and open the video only when they choose to watch it.
-  overlay.classList.remove('is-open');
-  overlay.classList.add('is-hidden');
-  document.body.classList.remove('video-modal-open');
+  if (isMobile()) {
+    window.openVideoModal();
+  } else {
+    overlay.classList.remove('is-open');
+    overlay.classList.add('is-hidden');
+    document.body.classList.remove('video-modal-open');
+  }
 
   closeBtn?.addEventListener('click', window.closeVideoModal);
   enterBtn?.addEventListener('click', window.closeVideoModal);
