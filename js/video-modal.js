@@ -13,14 +13,20 @@
   const backdrop = document.getElementById('video-modal-backdrop');
   const player = document.getElementById('mobile-intro-player');
 
-  const isMobile = () => window.innerWidth <= 820;
-
   window.openVideoModal = () => {
     overlay.classList.remove('is-hidden');
     overlay.classList.add('is-open');
     document.body.classList.add('video-modal-open');
-    if (player && typeof player.play === 'function') {
-      player.play().catch(() => {});
+    const playVideo = () => {
+      if (player && typeof player.play === 'function') {
+        player.play().catch(() => {});
+      }
+    };
+
+    if (typeof window.loadNeoVideo === 'function') {
+      window.loadNeoVideo().then(playVideo).catch(() => {});
+    } else {
+      playVideo();
     }
     if (typeof window.syncBottomNavActive === 'function') {
       window.syncBottomNavActive('video');
@@ -39,16 +45,11 @@
     }
   };
 
-  // Open overlay on mobile on initial load
-  if (isMobile()) {
-    document.body.classList.add('video-modal-open');
-    overlay.classList.add('is-open');
-    overlay.classList.remove('is-hidden');
-  } else {
-    overlay.classList.remove('is-open');
-    overlay.classList.add('is-hidden');
-    document.body.classList.remove('video-modal-open');
-  }
+  // Keep the intro optional. Mobile visitors should land directly on the
+  // concise page and open the video only when they choose to watch it.
+  overlay.classList.remove('is-open');
+  overlay.classList.add('is-hidden');
+  document.body.classList.remove('video-modal-open');
 
   closeBtn?.addEventListener('click', window.closeVideoModal);
   enterBtn?.addEventListener('click', window.closeVideoModal);
