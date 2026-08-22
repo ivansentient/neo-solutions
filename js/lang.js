@@ -110,13 +110,13 @@ const supportedLangs = new Set(['en', 'es']);
 const storageKey = 'neo-lang';
 
 const normalizeLang = (value) => {
-  if (!value) return 'en';
+  if (!value) return 'es';
 
   const lower = String(value).toLowerCase();
   if (lower.startsWith('es')) return 'es';
   if (lower.startsWith('en')) return 'en';
 
-  return supportedLangs.has(lower) ? lower : 'en';
+  return supportedLangs.has(lower) ? lower : 'es';
 };
 
 const getStoredLang = () => {
@@ -139,7 +139,7 @@ const getUrlLang = () => {
 };
 
 const getBrowserLang = () => {
-  const browserLang = window.navigator?.languages?.[0] || window.navigator?.language || 'en';
+  const browserLang = window.navigator?.languages?.[0] || window.navigator?.language || 'es';
   return normalizeLang(browserLang);
 };
 
@@ -239,6 +239,7 @@ const setLanguage = (lang, { persist = true } = {}) => {
 window.strings = strings;
 window.setLanguage = setLanguage;
 
-// Initialize language state immediately so the page matches the browser
-// preference on first paint, while preserving manual toggles afterward.
+// Spanish is the fallback. English is selected automatically only when the
+// browser/device reports English as its primary language. URL and saved manual
+// preferences continue to take priority.
 setLanguage(window.currentLang, { persist: false });
